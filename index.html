@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>3D Auto Care – Luxury & Sport Detailing | Üsküdar, İstanbul</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #050505;
+      --dark: #0a0a0a;
+      --panel: #111111;
+      --silver: #c8cdd6;
+      --silver2: #e8eaf0;
+      --accent: #7eb8f7;
+      --accent2: #4a9eff;
+      --gold: #d4a843;
+      --white: #f0f2f5;
+      --muted: #666;
+      --dim: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.09);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display: flex; align-items:center; justify-content:space-between;
+      padding: 1.2rem 5vw;
+      transition: all .4s;
+    }
+    nav.scrolled {
+      background: rgba(5,5,5,.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex; align-items:center; gap:.8rem;
+      text-decoration: none;
+    }
+    .logo-3d {
+      width: 46px; height: 46px;
+      background: linear-gradient(135deg, var(--accent2), #1a56c8);
+      border-radius: 12px;
+      display: flex; align-items:center; justify-content:center;
+      font-weight: 900; font-size: 1rem; color: white;
+      letter-spacing: -.5px;
+      box-shadow: 0 0 20px rgba(74,158,255,.35);
+      position: relative; overflow:hidden;
+    }
+    .logo-3d::before {
+      content: '';
+      position: absolute; inset:0;
+      background: linear-gradient(135deg, rgba(255,255,255,.25) 0%, transparent 60%);
+    }
+    .logo-txt {}
+    .logo-main { font-size:1.1rem; font-weight:700; color:var(--white); letter-spacing:.04em; }
+    .logo-main span { color: var(--accent2); }
+    .logo-sub { font-size:.58rem; letter-spacing:.18em; text-transform:uppercase; color: var(--muted); font-weight:500; }
+
+    .nav-links { list-style:none; display:flex; gap:2.2rem; align-items:center; }
+    .nav-links a {
+      color: rgba(255,255,255,.4); text-decoration:none;
+      font-size:.8rem; font-weight:500; letter-spacing:.06em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent2), #1a56c8) !important;
+      color: white !important;
+      padding: .5rem 1.4rem; border-radius:100px;
+      font-size:.78rem !important; font-weight:600 !important;
+      box-shadow: 0 4px 14px rgba(74,158,255,.35);
+    }
+    .nav-cta:hover { opacity:.9; transform:translateY(-1px); }
+
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
+    .hamburger span { display:block; width:22px; height:1.5px; background:var(--white); border-radius:1px; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 10rem 5vw 5rem;
+      position: relative; overflow:hidden;
+    }
+
+    /* animated gradient orbs */
+    .orb {
+      position: absolute; border-radius:50%;
+      filter: blur(80px); opacity: .18; pointer-events:none;
+    }
+    .orb1 { width:600px; height:600px; background:var(--accent2); top:-100px; right:-100px; animation: float1 8s ease-in-out infinite; }
+    .orb2 { width:400px; height:400px; background:#7b2fff; bottom:-50px; left:-80px; animation: float2 10s ease-in-out infinite; }
+    .orb3 { width:300px; height:300px; background:var(--gold); top:40%; right:30%; animation: float3 12s ease-in-out infinite; opacity:.1; }
+
+    @keyframes float1 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-40px,30px);} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(30px,-40px);} }
+    @keyframes float3 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-20px,20px);} }
+
+    /* grid overlay */
+    .grid-lines {
+      position: absolute; inset:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(74,158,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,158,255,.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    /* horizontal scan line */
+    .scan-line {
+      position: absolute; left:0; right:0; height:1px;
+      background: linear-gradient(90deg, transparent, rgba(74,158,255,.4), transparent);
+      animation: scan 4s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes scan { from{top:-5%;} to{top:105%;} }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items:center; gap:.6rem;
+      font-size:.72rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase;
+      color: var(--accent2); margin-bottom:1.4rem;
+      animation: fadeUp .7s ease both;
+    }
+    .eyebrow-dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); box-shadow:0 0 8px var(--accent2); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+    h1 {
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 900;
+      line-height: .93;
+      letter-spacing: -3px;
+      max-width: 800px;
+      animation: fadeUp .7s .1s ease both;
+    }
+    h1 .thin { font-weight: 200; color: rgba(255,255,255,.3); }
+    h1 .blue {
+      background: linear-gradient(90deg, var(--accent2), #7eb8f7);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem; color: rgba(255,255,255,.45);
+      max-width: 520px; margin-top: 1.4rem; line-height:1.8; font-weight:300;
+      animation: fadeUp .7s .2s ease both;
+    }
+
+    .hero-stats {
+      display: flex; gap:3rem; margin-top:2.5rem;
+      animation: fadeUp .7s .3s ease both;
+    }
+    .hs { }
+    .hs-num { font-size:2.8rem; font-weight:800; color:var(--white); line-height:1; }
+    .hs-num span { color:var(--accent2); }
+    .hs-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); font-weight:500; margin-top:2px; }
+
+    .hero-actions {
+      display:flex; gap:1rem; margin-top:2.5rem; flex-wrap:wrap;
+      animation: fadeUp .7s .4s ease both;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding: .9rem 2rem; border-radius:100px;
+      font-family: 'Outfit', sans-serif;
+      font-size:.85rem; font-weight:600; letter-spacing:.03em;
+      text-decoration:none; border:none; cursor:pointer;
+      transition: all .22s;
+    }
+    .btn-blue {
+      background: linear-gradient(135deg, var(--accent2), #1a56c8);
+      color: white;
+      box-shadow: 0 4px 24px rgba(74,158,255,.4);
+    }
+    .btn-blue:hover { transform:translateY(-2px); box-shadow:0 8px 36px rgba(74,158,255,.55); }
+    .btn-glass {
+      background: rgba(255,255,255,.06);
+      color: var(--white);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .btn-glass:hover { background:rgba(255,255,255,.1); }
+    .btn-wa { background:#25D366; color:white; }
+    .btn-wa:hover { background:#1db954; transform:translateY(-2px); }
+
+    /* perfect score badge */
+    .perfect-badge {
+      position: absolute; right:5vw; top:50%; transform:translateY(-50%);
+      animation: fadeUp .8s .5s ease both;
+    }
+    .pb-ring {
+      width:180px; height:180px;
+      border-radius: 50%;
+      border: 2px solid rgba(74,158,255,.2);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      position:relative;
+      box-shadow: 0 0 60px rgba(74,158,255,.1), inset 0 0 60px rgba(74,158,255,.05);
+    }
+    .pb-ring::before {
+      content:'';
+      position:absolute; inset:-8px;
+      border-radius:50%;
+      border: 1px solid rgba(74,158,255,.1);
+    }
+    .pb-num { font-size:4.5rem; font-weight:900; line-height:1; color:white; }
+    .pb-denom { font-size:1.2rem; font-weight:300; color:rgba(255,255,255,.35); }
+    .pb-stars { color:var(--accent2); font-size:1rem; letter-spacing:3px; margin-top:.3rem; }
+    .pb-label { font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-top:.5rem; }
+
+    /* ─── TICKER ─── */
+    .ticker {
+      background: var(--panel);
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      padding:.75rem 0; overflow:hidden; white-space:nowrap;
+    }
+    .ticker-inner { display:inline-flex; animation: ticker 24s linear infinite; }
+    .ti {
+      display:inline-flex; align-items:center; gap:.5rem; padding:0 2.5rem;
+      font-size:.78rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+      color:rgba(255,255,255,.4);
+    }
+    .ti .dot { width:5px; height:5px; border-radius:50%; background:var(--accent2); box-shadow:0 0 6px var(--accent2); }
+    @keyframes ticker { from{transform:translateX(0);} to{transform:translateX(-50%); } }
+
+    /* ─── SECTIONS ─── */
+    section { padding:7rem 5vw; }
+
+    .s-eyebrow {
+      font-size:.68rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--accent2); margin-bottom:.9rem;
+      display:flex; align-items:center; gap:.7rem;
+    }
+    .s-eyebrow::before { content:''; display:block; width:18px; height:1.5px; background:var(--accent2); }
+
+    h2 {
+      font-size:clamp(2.2rem, 4.5vw, 3.4rem);
+      font-weight:800; line-height:1.05; letter-spacing:-1.5px;
+      color:var(--white);
+    }
+    h2 em { font-style:italic; color:var(--accent2); }
+    .s-desc { color:rgba(255,255,255,.4); font-size:.95rem; max-width:500px; margin-top:.8rem; line-height:1.8; font-weight:300; }
+
+    /* ─── SERVICES ─── */
+    #hizmetler { background: var(--dark); }
+
+    .srv-layout {
+      display:grid; grid-template-columns:280px 1fr;
+      gap:5rem; margin-top:4rem; align-items:start;
+    }
+
+    .srv-aside {
+      position:sticky; top:8rem;
+    }
+
+    .quality-card {
+      background: linear-gradient(135deg, rgba(74,158,255,.12), rgba(74,158,255,.04));
+      border: 1px solid rgba(74,158,255,.2);
+      border-radius:20px; padding:2rem;
+      margin-top:2rem;
+    }
+    .qc-score { font-size:4rem; font-weight:900; color:white; line-height:1; }
+    .qc-stars { color:var(--accent2); font-size:1.1rem; letter-spacing:3px; margin:.3rem 0; }
+    .qc-label { color:rgba(255,255,255,.4); font-size:.78rem; }
+    .qc-divider { height:1px; background:rgba(74,158,255,.15); margin:1.2rem 0; }
+    .qc-item { display:flex; align-items:center; gap:.6rem; color:rgba(255,255,255,.5); font-size:.82rem; margin-bottom:.5rem; }
+    .qc-item::before { content:'✓'; color:var(--accent2); font-weight:700; }
+
+    .srv-cards {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:1px; background:var(--border); border:1px solid var(--border);
+      border-radius:16px; overflow:hidden;
+    }
+    .sc {
+      background:var(--dark); padding:2.2rem;
+      transition:background .25s; position:relative; overflow:hidden;
+    }
+    .sc::after {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg, rgba(74,158,255,.07), transparent);
+      opacity:0; transition:opacity .3s;
+    }
+    .sc:hover { background:var(--panel); }
+    .sc:hover::after { opacity:1; }
+
+    .sc-num { font-size:2.5rem; font-weight:900; color:rgba(74,158,255,.08); line-height:1; margin-bottom:.6rem; }
+    .sc-icon { font-size:1.8rem; margin-bottom:.8rem; display:block; }
+    .sc h3 { font-size:1rem; font-weight:700; margin-bottom:.4rem; color:var(--white); }
+    .sc p { color:rgba(255,255,255,.38); font-size:.83rem; line-height:1.65; font-weight:300; }
+
+    .sc.hero-svc {
+      background: linear-gradient(135deg, rgba(74,158,255,.18), rgba(74,158,255,.06));
+      border-bottom:2px solid var(--accent2);
+    }
+    .sc.hero-svc h3 { color:var(--accent2); }
+
+    /* ─── REVIEWS ─── */
+    #yorumlar { background:var(--black); }
+
+    .rev-header {
+      display:flex; align-items:flex-end; justify-content:space-between;
+      flex-wrap:wrap; gap:1.5rem; margin-bottom:3rem;
+    }
+
+    .perfect-strip {
+      display:inline-flex; align-items:center; gap:1rem;
+      background: linear-gradient(135deg, rgba(74,158,255,.12), rgba(74,158,255,.04));
+      border:1px solid rgba(74,158,255,.2);
+      border-radius:100px; padding:.7rem 1.5rem;
+    }
+    .ps-stars { color:var(--accent2); font-size:.9rem; letter-spacing:2px; }
+    .ps-text { color:white; font-size:.88rem; font-weight:600; }
+    .ps-count { color:rgba(255,255,255,.4); font-size:.78rem; }
+
+    .rev-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+
+    .rc {
+      background:var(--panel); border:1px solid var(--border);
+      border-radius:16px; padding:1.8rem;
+      transition:border-color .25s, transform .25s;
+    }
+    .rc:hover { border-color:rgba(74,158,255,.25); transform:translateY(-3px); }
+    .rc.featured {
+      background:linear-gradient(135deg,rgba(74,158,255,.14),rgba(74,158,255,.04));
+      border-color:rgba(74,158,255,.3);
+    }
+
+    .rc-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+    .rc-stars { color:var(--accent2); font-size:.82rem; letter-spacing:2px; }
+    .rc-date { color:rgba(255,255,255,.25); font-size:.72rem; }
+
+    .rc p { color:rgba(255,255,255,.55); font-size:.88rem; line-height:1.75; font-weight:300; }
+
+    .rc-footer {
+      display:flex; align-items:center; gap:.7rem;
+      margin-top:1.4rem; padding-top:1.2rem;
+      border-top:1px solid var(--border);
+    }
+    .rc-av {
+      width:34px; height:34px; border-radius:50%;
+      background:linear-gradient(135deg,var(--accent2),#1a56c8);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.75rem; font-weight:700; color:white; flex-shrink:0;
+    }
+    .rc-name { font-weight:600; font-size:.84rem; color:var(--white); }
+    .rc-meta { color:rgba(255,255,255,.3); font-size:.7rem; }
+
+    /* ─── INFO ─── */
+    #bilgi {
+      background: var(--panel);
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      padding:4rem 5vw;
+    }
+    .info-row { display:grid; grid-template-columns:repeat(4,1fr); gap:3rem; }
+    .ib { border-left:1px solid rgba(74,158,255,.2); padding-left:1.5rem; }
+    .ib-label { font-size:.62rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+    .ib-val { font-size:.93rem; color:var(--white); font-weight:400; line-height:1.5; }
+
+    /* ─── HOURS ─── */
+    #saatler { background:var(--dark); }
+
+    .hours-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; margin-top:3rem; align-items:start; }
+
+    .hl-row {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:.8rem 1rem; border-bottom:1px solid var(--border);
+      border-radius:6px; transition:background .18s;
+    }
+    .hl-row:hover { background:rgba(255,255,255,.03); }
+    .hl-day { font-weight:500; font-size:.9rem; color:var(--white); }
+    .hl-time { color:rgba(255,255,255,.4); font-size:.88rem; }
+
+    .hours-aside {}
+    .early-badge {
+      background:linear-gradient(135deg,rgba(74,158,255,.15),rgba(74,158,255,.04));
+      border:1px solid rgba(74,158,255,.25); border-radius:20px; padding:2.5rem;
+      margin-bottom:1.2rem;
+    }
+    .eb-icon { font-size:2rem; margin-bottom:.8rem; }
+    .eb-title { font-size:1.4rem; font-weight:800; color:white; letter-spacing:-.5px; margin-bottom:.5rem; }
+    .eb-desc { color:rgba(255,255,255,.4); font-size:.87rem; line-height:1.7; margin-bottom:1.5rem; }
+
+    .loc-card {
+      background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:1.8rem;
+    }
+    .lc-row { display:flex; align-items:flex-start; gap:.8rem; margin-bottom:1rem; }
+    .lc-row:last-child { margin-bottom:0; }
+    .lc-icon { font-size:1.1rem; flex-shrink:0; margin-top:2px; }
+    .lc-label { font-size:.6rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent2); margin-bottom:.15rem; }
+    .lc-val { font-size:.88rem; color:var(--white); font-weight:400; }
+
+    /* ─── CONTACT ─── */
+    #iletisim { background:var(--black); }
+
+    .contact-layout { display:grid; grid-template-columns:1fr 1.3fr; gap:4rem; margin-top:3rem; align-items:start; }
+
+    .c-cards { display:flex; flex-direction:column; gap:1rem; }
+    .cb {
+      display:flex; align-items:center; gap:1.1rem;
+      background:var(--panel); border:1px solid var(--border);
+      border-radius:14px; padding:1.3rem 1.5rem;
+      text-decoration:none; color:inherit;
+      transition:border-color .22s, transform .22s;
+    }
+    .cb:hover { border-color:rgba(74,158,255,.3); transform:translateX(4px); }
+    .cb-icon { font-size:1.5rem; flex-shrink:0; }
+    .cb-label { font-size:.6rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent2); margin-bottom:.15rem; }
+    .cb-val { font-size:.93rem; font-weight:600; color:var(--white); }
+    .cb-wa { border-color:rgba(37,211,102,.2); background:rgba(37,211,102,.05); }
+    .cb-wa:hover { border-color:rgba(37,211,102,.45); }
+    .cb-ig { border-color:rgba(193,53,132,.2); background:rgba(193,53,132,.05); }
+    .cb-ig:hover { border-color:rgba(193,53,132,.45); }
+
+    .map-wrap { border-radius:18px; overflow:hidden; height:420px; border:1px solid var(--border); }
+    .map-wrap iframe { width:100%; height:100%; border:none; display:block; filter:invert(1) hue-rotate(180deg) saturate(.6); }
+
+    /* ─── WA FAB ─── */
+    .wa-fab {
+      position:fixed; bottom:2rem; right:2rem; z-index:200;
+      display:flex; align-items:center; gap:.6rem;
+      background:#25D366; color:white;
+      padding:.8rem 1.5rem; border-radius:100px;
+      text-decoration:none; font-weight:700; font-size:.85rem;
+      box-shadow:0 4px 20px rgba(37,211,102,.4);
+      transition:transform .2s, box-shadow .2s;
+      animation:pulse-g 2.5s infinite;
+    }
+    .wa-fab:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(37,211,102,.6); }
+    @keyframes pulse-g{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4);}50%{box-shadow:0 4px 38px rgba(37,211,102,.65);}}
+
+    /* ─── FOOTER ─── */
+    footer {
+      background:var(--dark);
+      border-top:1px solid var(--border);
+      padding:3rem 5vw 2rem;
+    }
+    .ft { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1.5rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
+    .fl-name { font-size:1.3rem; font-weight:800; color:white; }
+    .fl-name span { color:var(--accent2); }
+    .fl-sub { font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.25); margin-top:2px; }
+    .f-links { display:flex; gap:2rem; }
+    .f-links a { color:rgba(255,255,255,.3); text-decoration:none; font-size:.78rem; font-weight:500; transition:color .2s; }
+    .f-links a:hover { color:var(--accent2); }
+    .fb { display:flex; justify-content:space-between; align-items:center; padding-top:1.5rem; flex-wrap:wrap; gap:.8rem; }
+    .f-copy { color:rgba(255,255,255,.2); font-size:.75rem; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:1100px) {
+      .perfect-badge { display:none; }
+      .srv-layout { grid-template-columns:1fr; }
+      .srv-aside { position:static; }
+    }
+    @media(max-width:900px) {
+      .rev-grid { grid-template-columns:1fr; }
+      .info-row { grid-template-columns:1fr 1fr; }
+      .ib { border-left:none; padding-left:0; border-top:1px solid rgba(74,158,255,.15); padding-top:1.2rem; }
+      .hours-grid { grid-template-columns:1fr; gap:2.5rem; }
+      .contact-layout { grid-template-columns:1fr; gap:2.5rem; }
+    }
+    @media(max-width:700px) {
+      .nav-links { display:none; flex-direction:column; position:absolute; top:100%; left:0; right:0; background:rgba(5,5,5,.98); padding:1.5rem 5vw; gap:1.2rem; border-bottom:1px solid var(--border); }
+      .nav-links.open { display:flex; }
+      .hamburger { display:flex; }
+      .srv-cards { grid-template-columns:1fr; }
+      section { padding:5rem 5vw; }
+      .wa-fab span { display:none; }
+      .wa-fab { padding:.9rem; border-radius:50%; }
+      h1 { letter-spacing:-1px; }
+      .hero-stats { gap:1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="logo-3d">3D</div>
+    <div class="logo-txt">
+      <div class="logo-main"><span>3D</span> Auto Care</div>
+      <div class="logo-sub">Luxury & Sport Detailing</div>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hizmetler">Hizmetler</a></li>
+    <li><a href="#yorumlar">Yorumlar</a></li>
+    <li><a href="#saatler">Saatler</a></li>
+    <li><a href="#iletisim" class="nav-cta">İletişim</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="grid-lines"></div>
+  <div class="scan-line"></div>
+
+  <div class="hero-eyebrow">
+    <span class="eyebrow-dot"></span>
+    Küçük Çamlıca · Üsküdar · İstanbul
+  </div>
+
+  <h1>
+    <span class="thin">LUXURY</span><br>
+    <span class="blue">AUTO</span><br>
+    DETAILING
+  </h1>
+
+  <p class="hero-tagline">
+    Aracınız için en ileri teknoloji ve en özenli elleri bir araya getirdik. PPF'den seramiğe, pasta ciladan boya korumaya — tam kapsamlı premium bakım.
+  </p>
+
+  <div class="hero-stats">
+    <div class="hs">
+      <div class="hs-num">5<span>.0</span></div>
+      <div class="hs-label">Mükemmel Puan</div>
+    </div>
+    <div class="hs">
+      <div class="hs-num">21<span>+</span></div>
+      <div class="hs-label">Google Yorumu</div>
+    </div>
+    <div class="hs">
+      <div class="hs-num">06<span>:00</span></div>
+      <div class="hs-label">Erken Açılış</div>
+    </div>
+  </div>
+
+  <div class="hero-actions">
+    <a href="https://wa.me/905324405523" target="_blank" class="btn btn-blue">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Randevu Al
+    </a>
+    <a href="https://instagram.com" target="_blank" class="btn btn-glass">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Instagram'ı Takip Et
+    </a>
+    <a href="#hizmetler" class="btn btn-glass">Hizmetler ↓</a>
+  </div>
+
+  <!-- Perfect score badge -->
+  <div class="perfect-badge">
+    <div class="pb-ring">
+      <div class="pb-num">5.0</div>
+      <div class="pb-denom">/ 5.0</div>
+      <div class="pb-stars">★★★★★</div>
+      <div class="pb-label">21 Yorum · %100</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ti"><span class="dot"></span>Luxury Detailing</span>
+    <span class="ti"><span class="dot"></span>PPF Koruma</span>
+    <span class="ti"><span class="dot"></span>Seramik Kaplama</span>
+    <span class="ti"><span class="dot"></span>Boya Koruma</span>
+    <span class="ti"><span class="dot"></span>Pasta & Cila</span>
+    <span class="ti"><span class="dot"></span>İç–Dış Yıkama</span>
+    <span class="ti"><span class="dot"></span>Sport Detailing</span>
+    <span class="ti"><span class="dot"></span>5.0 / 5.0 ★★★★★</span>
+    <span class="ti"><span class="dot"></span>Luxury Detailing</span>
+    <span class="ti"><span class="dot"></span>PPF Koruma</span>
+    <span class="ti"><span class="dot"></span>Seramik Kaplama</span>
+    <span class="ti"><span class="dot"></span>Boya Koruma</span>
+    <span class="ti"><span class="dot"></span>Pasta & Cila</span>
+    <span class="ti"><span class="dot"></span>İç–Dış Yıkama</span>
+    <span class="ti"><span class="dot"></span>Sport Detailing</span>
+    <span class="ti"><span class="dot"></span>5.0 / 5.0 ★★★★★</span>
+  </div>
+</div>
+
+<!-- HİZMETLER -->
+<section id="hizmetler">
+  <div class="s-eyebrow">Premium Hizmetler</div>
+  <h2>Aracınıza<br><em>Layık Bakım</em></h2>
+  <p class="s-desc">Her detay önemlidir. Her yüzey, her kaplama, her koruma katmanı — en ileri teknoloji ile uygulanır.</p>
+
+  <div class="srv-layout reveal">
+    <div class="srv-aside">
+      <p style="color:rgba(255,255,255,.45); font-size:.9rem; line-height:1.8; font-weight:300;">
+        Üsküdar Küçük Çamlıca'da, her gün sabah 06:00'dan akşam 20:30'a kadar hizmetinizdeyiz. Sizi bekliyoruz.
+      </p>
+      <div class="quality-card">
+        <div class="qc-score">5.0</div>
+        <div class="qc-stars">★★★★★</div>
+        <div class="qc-label">21 Google yorumu — mükemmel</div>
+        <div class="qc-divider"></div>
+        <div class="qc-item">Hızlı ve verimli hizmet</div>
+        <div class="qc-item">Güvenilir ekip</div>
+        <div class="qc-item">Aile dostu ortam</div>
+        <div class="qc-item">Bekleme alanı mevcut</div>
+        <div class="qc-item">Sabah 06:00 açılış</div>
+      </div>
+    </div>
+
+    <div class="srv-cards">
+      <div class="sc hero-svc">
+        <span class="sc-num">01</span>
+        <span class="sc-icon">🛡️</span>
+        <h3>PPF Koruma</h3>
+        <p>Paint Protection Film — görünmez kalkan. Taş izi, çizik ve UV hasarına karşı aracınızın boyasını en ileri filmle koruyoruz.</p>
+      </div>
+      <div class="sc">
+        <span class="sc-num">02</span>
+        <span class="sc-icon">💎</span>
+        <h3>Seramik Kaplama</h3>
+        <p>Nano seramik kaplama ile yıllarca süren parlak koruma. Su, kir ve kimyasallar yüzeyinize tutunamaz.</p>
+      </div>
+      <div class="sc">
+        <span class="sc-num">03</span>
+        <span class="sc-icon">🎨</span>
+        <h3>Boya Koruma</h3>
+        <p>Lakenizi dış etkenlerden koruyan, oksidasyonu önleyen ve rengi uzun süre canlı tutan özel boya koruma işlemleri.</p>
+      </div>
+      <div class="sc">
+        <span class="sc-num">04</span>
+        <span class="sc-icon">✨</span>
+        <h3>Pasta & Cila</h3>
+        <p>Micro çizikler, mat görünüm, pul pul boya — pasta ve cila ile aracınız showroom'dan yeni çıkmış gibi parlar.</p>
+      </div>
+      <div class="sc">
+        <span class="sc-num">05</span>
+        <span class="sc-icon">🧹</span>
+        <h3>Detaylı İç Temizlik</h3>
+        <p>Koltuklar, tavan, kapı cepleri, havalandırma deliklerine kadar her köşe titizlikle temizlenir ve arındırılır.</p>
+      </div>
+      <div class="sc">
+        <span class="sc-num">06</span>
+        <span class="sc-icon">💧</span>
+        <h3>İç – Dış Yıkama</h3>
+        <p>Premium ürünlerle hızlı ve kusursuz yıkama. Kireç izi bırakmadan, çizmeden, mükemmel sonuçla.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YORUMLAR -->
+<section id="yorumlar">
+  <div class="s-eyebrow">Müşteri Yorumları</div>
+  <div class="rev-header reveal">
+    <div>
+      <h2>Hepsi<br><em>5 Yıldız</em></h2>
+    </div>
+    <div class="perfect-strip">
+      <div class="ps-stars">★★★★★</div>
+      <div>
+        <div class="ps-text">5.0 / 5.0 — Mükemmel</div>
+        <div class="ps-count">21 doğrulanmamış Google yorumu</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rev-grid reveal">
+    <div class="rc featured">
+      <div class="rc-top">
+        <div class="rc-stars">★★★★★</div>
+        <div class="rc-date">2 hafta önce</div>
+      </div>
+      <p>"Ailenizle birlikte aracınızı gönül rahatlığıyla teslim edebileceğiniz bir işletme. Yapmış oldukları oturma alanı sayesinde aracınızı beklerken sıkılmayacaksınız. Hızlı, pratik ve verimli iş çıkartıyorlar. Çalışanları çok saygılı ve hizmetleri süper — denemenizi tavsiye ederim."</p>
+      <div class="rc-footer">
+        <div class="rc-av">EÇ</div>
+        <div>
+          <div class="rc-name">Enes Çavuş</div>
+          <div class="rc-meta">2 hafta önce · Google</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rc">
+      <div class="rc-top">
+        <div class="rc-stars">★★★★★</div>
+        <div class="rc-date">2 hafta önce</div>
+      </div>
+      <p>"Hızlı, temiz ve güvenilir bir işletme. Kısa sürede harika bir iş çıkartıyorlar — inanılmaz bir ekip! Aracınızı gönül rahatlığıyla bırakabilirsiniz."</p>
+      <div class="rc-footer">
+        <div class="rc-av">NÖ</div>
+        <div>
+          <div class="rc-name">Nazlı Öztemur</div>
+          <div class="rc-meta">2 hafta önce · Google</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rc">
+      <div class="rc-top">
+        <div class="rc-stars">★★★★★</div>
+        <div class="rc-date">2 hafta önce</div>
+      </div>
+      <p>"Gayet temiz, özenli yer — hızlı ve temiz çalışıyorlar. Memnun kaldım, tavsiye ederim. Yakın çevremdeki herkese söyledim."</p>
+      <div class="rc-footer">
+        <div class="rc-av">YY</div>
+        <div>
+          <div class="rc-name">Yaprak Yiğit</div>
+          <div class="rc-meta">2 hafta önce · Google</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:2.5rem;">
+    <a href="https://maps.app.goo.gl/xTgQ8KWDuWy6HhvN7" target="_blank" class="btn btn-glass">
+      Google'da Tüm Yorumları Gör →
+    </a>
+  </div>
+</section>
+
+<!-- BİLGİ -->
+<div id="bilgi">
+  <div class="info-row reveal">
+    <div class="ib">
+      <div class="ib-label">Adres</div>
+      <div class="ib-val">Küçük Çamlıca Mah.<br>Üçpınarlar Cd., Enver Sk.<br>Üsküdar / İstanbul</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">Telefon</div>
+      <div class="ib-val">0532 440 55 23</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">Google Puanı</div>
+      <div class="ib-val">5.0 / 5.0 ★<br>21 Değerlendirme</div>
+    </div>
+    <div class="ib">
+      <div class="ib-label">Çalışma</div>
+      <div class="ib-val">Her Gün<br>06:00 – 20:30</div>
+    </div>
+  </div>
+</div>
+
+<!-- SAATLER -->
+<section id="saatler">
+  <div class="s-eyebrow">Çalışma Saatleri</div>
+  <h2>Her Gün<br><em>06:00'dan İtibaren</em></h2>
+
+  <div class="hours-grid reveal">
+    <div>
+      <div class="hl-row"><span class="hl-day">Pazartesi</span><span class="hl-time">06:00 – 20:30</span></div>
+      <div class="hl-row"><span class="hl-day">Salı</span><span class="hl-time">06:00 – 20:30</span></div>
+      <div class="hl-row"><span class="hl-day">Çarşamba</span><span class="hl-time">06:00 – 20:30</span></div>
+      <div class="hl-row"><span class="hl-day">Perşembe</span><span class="hl-time">06:00 – 20:30</span></div>
+      <div class="hl-row"><span class="hl-day">Cuma</span><span class="hl-time">06:00 – 20:30</span></div>
+      <div class="hl-row"><span class="hl-day">Cumartesi</span><span class="hl-time">06:00 – 20:30</span></div>
+      <div class="hl-row" style="border-bottom:none;"><span class="hl-day">Pazar</span><span class="hl-time">06:00 – 20:30</span></div>
+    </div>
+
+    <div class="hours-aside">
+      <div class="early-badge">
+        <div class="eb-icon">🌅</div>
+        <div class="eb-title">Sabah 06:00'da Açığız!</div>
+        <div class="eb-desc">İşe gitmeden önce aracınızı bırakın, gün sonunda tertemiz alın. Haftanın 7 günü sabah erkenden hizmetinizdeyiz.</div>
+        <a href="https://wa.me/905324405523" target="_blank" class="btn btn-blue">
+          Randevu Al →
+        </a>
+      </div>
+
+      <div class="loc-card">
+        <div class="lc-row">
+          <span class="lc-icon">📍</span>
+          <div>
+            <div class="lc-label">Adres</div>
+            <div class="lc-val">Küçük Çamlıca Mah., Üçpınarlar Cd., Enver Sk.<br>34696 Üsküdar / İstanbul</div>
+          </div>
+        </div>
+        <div class="lc-row">
+          <span class="lc-icon">📸</span>
+          <div>
+            <div class="lc-label">Instagram</div>
+            <div class="lc-val">instagram.com</div>
+          </div>
+        </div>
+        <div style="margin-top:1.2rem;">
+          <a href="https://maps.app.goo.gl/xTgQ8KWDuWy6HhvN7" target="_blank" class="btn btn-glass" style="font-size:.8rem; padding:.7rem 1.4rem;">
+            🗺️ Haritada Aç
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section id="iletisim">
+  <div class="s-eyebrow">İletişim & Konum</div>
+  <h2>Bize<br><em>Ulaşın</em></h2>
+
+  <div class="contact-layout reveal">
+    <div>
+      <div class="c-cards">
+        <a href="https://wa.me/905324405523" target="_blank" class="cb cb-wa">
+          <span class="cb-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </span>
+          <div>
+            <div class="cb-label">WhatsApp</div>
+            <div class="cb-val">0532 440 55 23</div>
+          </div>
+        </a>
+
+        <a href="tel:+905324405523" class="cb">
+          <span class="cb-icon">📞</span>
+          <div>
+            <div class="cb-label">Telefon</div>
+            <div class="cb-val">0532 440 55 23</div>
+          </div>
+        </a>
+
+        <a href="https://instagram.com" target="_blank" class="cb cb-ig">
+          <span class="cb-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="url(#ig-grad)">
+              <defs>
+                <linearGradient id="ig-grad" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#f09433"/>
+                  <stop offset="25%" stop-color="#e6683c"/>
+                  <stop offset="50%" stop-color="#dc2743"/>
+                  <stop offset="75%" stop-color="#cc2366"/>
+                  <stop offset="100%" stop-color="#bc1888"/>
+                </linearGradient>
+              </defs>
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </span>
+          <div>
+            <div class="cb-label">Instagram</div>
+            <div class="cb-val">Bizi Takip Edin</div>
+          </div>
+        </a>
+
+        <div class="cb" style="cursor:default;">
+          <span class="cb-icon">📍</span>
+          <div>
+            <div class="cb-label">Adres</div>
+            <div class="cb-val">Küçük Çamlıca Mah., Üçpınarlar Cd., Enver Sk.<br>34696 Üsküdar / İstanbul</div>
+          </div>
+        </div>
+
+        <div class="cb" style="cursor:default;">
+          <span class="cb-icon">🕕</span>
+          <div>
+            <div class="cb-label">Çalışma Saatleri</div>
+            <div class="cb-val">Her Gün: 06:00 – 20:30</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-wrap">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.5!2d29.0830!3d41.0230!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z3D+Auto+Care!5e0!3m2!1str!2str!4v1"
+        allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="3D Auto Care Konum">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div>
+      <div class="fl-name"><span>3D</span> Auto Care</div>
+      <div class="fl-sub">Luxury & Sport Detailing · Üsküdar, İstanbul</div>
+    </div>
+    <div class="f-links">
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#yorumlar">Yorumlar</a>
+      <a href="#saatler">Saatler</a>
+      <a href="#iletisim">İletişim</a>
+    </div>
+  </div>
+  <div class="fb">
+    <div class="f-copy">© 2025 3D Auto Care · Küçük Çamlıca, Üsküdar / İstanbul</div>
+    <div class="f-copy">⭐ 5.0 / 5.0 · 21 Google Yorumu</div>
+  </div>
+</footer>
+
+<!-- FAB -->
+<a href="https://wa.me/905324405523" target="_blank" class="wa-fab">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span>WhatsApp</span>
+</a>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+  const ham = document.getElementById('hamburger');
+  const nav = document.getElementById('navLinks');
+  ham.addEventListener('click', () => nav.classList.toggle('open'));
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: .1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
